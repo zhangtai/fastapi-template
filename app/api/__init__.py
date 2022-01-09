@@ -4,7 +4,7 @@ from fastapi import Depends, FastAPI, HTTPException, Query, status
 from tortoise.contrib.fastapi import register_tortoise
 from tortoise.exceptions import DoesNotExist
 
-from models.post import (
+from models.posts import (
     CommentBase,
     CommentDB,
     CommentTortoise,
