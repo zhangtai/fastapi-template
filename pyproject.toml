@@ -5,3 +5,6 @@ src_folder = "./."
 
 [tool.pylint]
 load-plugins = "tortoise.contrib.pylint"
+
+[tool.mypy]
+python_version = "3.9"
