@@ -2,3 +2,6 @@
 tortoise_orm = "api.TORTOISE_ORM"
 location = "./migrations"
 src_folder = "./."
+
+[tool.pylint]
+load-plugins = "tortoise.contrib.pylint"
