@@ -1,6 +1,7 @@
 -r base.txt
 
-mypy
 black
+flake8
+mypy
 pylint
 pytest

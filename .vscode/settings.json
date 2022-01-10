@@ -7,5 +7,6 @@
         "aerich",
         "pydantic",
         "starlette"
-    ]
+    ],
+    "python.pythonPath": "venv/bin/python"
 }
