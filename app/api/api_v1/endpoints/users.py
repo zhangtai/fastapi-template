@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from models.users import User_Pydantic, UserIn_Pydantic, Users
+from app.models.users import User_Pydantic, UserIn_Pydantic, Users
 from pydantic import BaseModel
 
 from tortoise.contrib.fastapi import HTTPNotFoundError
