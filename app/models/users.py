@@ -1,37 +1,65 @@
-"""
-Demo user model
-https://tortoise.github.io/examples/fastapi.html
-"""
-from tortoise import fields, models
-from tortoise.contrib.pydantic import pydantic_model_creator
+from datetime import datetime, timedelta
+
+from pydantic import BaseModel, EmailStr, Field
+from tortoise.models import Model
+from tortoise import fields, timezone
+
+from utils.password import generate_token
 
 
-class Users(models.Model):
-    """
-    The User model
-    """
-
-    id = fields.IntField(pk=True)
-    username = fields.CharField(max_length=20, unique=True)
-    name = fields.CharField(max_length=50, null=True)
-    family_name = fields.CharField(max_length=50, null=True)
-    category = fields.CharField(max_length=30, default="misc")
-    password_hash = fields.CharField(max_length=128, null=True)
-    created_at = fields.DatetimeField(auto_now_add=True)
-    modified_at = fields.DatetimeField(auto_now=True)
-
-    def full_name(self) -> str:
-        """
-        Returns the best name
-        """
-        if self.name or self.family_name:
-            return f"{self.name or ''} {self.family_name or ''}".strip()
-        return self.username
-
-    class PydanticMeta:
-        computed = ["full_name"]
-        exclude = ["password_hash"]
+def get_expiration_date(duration_seconds: int = 86400) -> datetime:
+    return timezone.now() + timedelta(seconds=duration_seconds)
 
 
-User_Pydantic = pydantic_model_creator(Users, name="User")
-UserIn_Pydantic = pydantic_model_creator(Users, name="UserIn", exclude_readonly=True)
+class UserBase(BaseModel):
+    email: EmailStr
+
+    class Config:
+        orm_mode = True
+
+
+class UserCreate(UserBase):
+    password: str
+
+
+class UserUpdate(UserBase):
+    pass
+
+
+class User(UserBase):
+    id: int
+
+
+class UserDB(User):
+    hashed_password: str
+
+
+class AccessToken(BaseModel):
+    user_id: int
+    access_token: str = Field(default_factory=generate_token)
+    expiration_date: datetime = Field(default_factory=get_expiration_date)
+
+    def max_age(self) -> int:
+        delta = self.expiration_date - timezone.now()
+        return int(delta.total_seconds())
+
+    class Config:
+        orm_mode = True
+
+
+class UserTortoise(Model):
+    id = fields.IntField(pk=True, generated=True)
+    email = fields.CharField(index=True, unique=True, null=False, max_length=255)
+    hashed_password = fields.CharField(null=False, max_length=255)
+
+    class Meta:
+        table = "users"
+
+
+class AccessTokenTortoise(Model):
+    access_token = fields.CharField(pk=True, max_length=255)
+    user = fields.ForeignKeyField("models.UserTortoise", null=False)
+    expiration_date = fields.DatetimeField(null=False)
+
+    class Meta:
+        table = "access_tokens"
