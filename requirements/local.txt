@@ -1,7 +1,9 @@
 -r base.txt
 
-black
+autopep8
 flake8
 mypy
 pylint
-pytest
+pylint-pydantic
+types-PyYAML
+isort

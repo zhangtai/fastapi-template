@@ -4,7 +4,7 @@ location = "./migrations"
 src_folder = "./."
 
 [tool.pylint.master]
-load-plugins = "tortoise.contrib.pylint"
+load-plugins = "pylint_pydantic,tortoise.contrib.pylint"
 
 [tool.pylint.format]
 max-line-length = 120
