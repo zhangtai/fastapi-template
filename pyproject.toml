@@ -3,24 +3,43 @@ tortoise_orm = "app.main.TORTOISE_ORM"
 location = "./migrations"
 src_folder = "./."
 
-[tool.pylint]
+[tool.pylint.master]
 load-plugins = "tortoise.contrib.pylint"
+
+[tool.pylint.format]
+max-line-length = 120
+
+[tool.pylint.messages_control]
+disable = "missing-docstring,invalid-name"
+
+[tool.pylint.design]
+max-parents = 13
+
+[tool.pylint.typecheck]
+generated-members = 'REQUEST,acl_users,aq_parent,"[a-zA-Z]+_set{1,2}",save,delete'
+
 
 [tool.mypy]
 python_version = "3.9"
-warn_unused_configs = "True"
-disallow_subclassing_any = "True"
-disallow_any_generics = "True"
-disallow_untyped_calls = "True"
-disallow_untyped_defs = "True"
-disallow_incomplete_defs = "True"
-check_untyped_defs = "True"
-disallow_untyped_decorators = "True"
-no_implicit_optional = "True"
-warn_redundant_casts = "True"
-warn_unused_ignores = "True"
-warn_return_any = "True"
-no_implicit_reexport = "True"
-follow_imports_for_stubs = "True"
+warn_unused_configs = true
+disallow_subclassing_any = true
+disallow_any_generics = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_return_any = true
+no_implicit_reexport = true
+follow_imports_for_stubs = true
 plugins = "sqlmypy,pydantic.mypy"
-namespace_packages = "True"
+namespace_packages = true
+
+[tool.isort]
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+line_length = 88
