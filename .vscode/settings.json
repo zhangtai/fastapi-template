@@ -1,12 +1,8 @@
 {
-    "python.linting.pylintEnabled": false,
     "python.linting.enabled": true,
-    "python.linting.flake8Enabled": true,
+    "python.linting.pylintEnabled": true,
+    "python.linting.pylintArgs": ["--load-plugins pylint_pydantic tortoise.contrib.pylint"],
+    "python.linting.flake8Enabled": false,
     "python.linting.mypyEnabled": true,
-    "cSpell.words": [
-        "aerich",
-        "pydantic",
-        "starlette"
-    ],
-    "python.pythonPath": "venv/bin/python"
+    "python.pythonPath": "venv/bin/python3"
 }
